@@ -13,14 +13,10 @@ module.exports = {
       res.status(400).send();
     }
 
-    let post = {
-      title: req.body.title,
-      body: req.body.body,
-      url: req.body.url
-    };
+    const postId = store.posts.length;
 
-    store.posts.push(post);
-    res.status(200).send(post);
+    store.posts.push(req.body);
+    res.status(200).send({ id: postId });
   },
 
   updatePost(req, res) {
@@ -32,14 +28,14 @@ module.exports = {
       res.status(400).send();
     }
 
-    let id = req.params.postId;
-    let post = {
-      title: req.body.title,
-      body: req.body.body
-    };
+    const postId = req.params.postId;
 
-    posts[id] = post;
-    res.status(200).send(id);
+    if (!store.posts[postId]) {
+      res.status(404).send('Resource not found');
+    }
+
+    store.posts[postId] = req.body;
+    res.status(200).send({ id: postId });
   },
 
   removePost(req, res) {
@@ -49,9 +45,13 @@ module.exports = {
       res.status(400).send();
     }
 
-    let id = req.params.postId;
+    const postId = req.params.postId;
 
-    posts.splice(id, 1);
-    res.status(200).send(id);
+    if (!store.posts[postId]) {
+      res.status(404).send('Resource not found');
+    }
+
+    store.posts.splice(postId, 1);
+    res.status(200).send({ id: postId });
   }
 };

@@ -1,23 +1,40 @@
-comments = [];
+const store = require('../store');
 
 module.exports = {
   getComments (req, res) {
-    res.status(200).send(comments);
+    req.check('postId').notEmpty();
+
+    if (req.validationErrors()) {
+      res.status(400).send();
+    }
+
+    const postId = req.params.postId;
+
+    if (!store.posts[postId]) {
+      res.status(404).send('Resource not found');
+    }
+
+    res.status(200).send(store.posts[postId].comments);
   },
 
   addComment(req, res) {
+    req.check('postId').notEmpty();
     req.check('text').notEmpty();
 
     if (req.validationErrors()) {
       res.status(400).send();
     }
 
-    let comment = {
-      text: req.body.text
-    };
+    const postId = req.params.postId;
 
-    comments.push(comment);
-    res.status(200).send(comments);
+    if (!store.posts[postId]) {
+      res.status(404).send('Resource not found');
+    }
+
+    const commentId = store.posts[postId].comments.length;
+
+    store.posts[postId].comments.push(req.body);
+    res.status(200).send({ id: commentId });
   },
 
   updateComment(req, res) {
@@ -29,13 +46,15 @@ module.exports = {
       res.status(400).send();
     }
 
-    let id = req.params.commentId;
-    let comment = {
-      text: req.body.text
-    };
+    const postId = req.params.postId;
+    const commentId = req.params.commentId;
 
-    comments[id] = comment;
-    res.status(200).send(id);
+    if (!store.posts[postId] || !store.posts[postId].comments[commentId]) {
+      res.status(404).send('Resource not found');
+    }
+
+    store.posts[postId].comments[commentId] = req.body;
+    res.status(200).send({ id: commentId });
   },
 
   removeComment(req, res) {
@@ -46,9 +65,14 @@ module.exports = {
       res.status(400).send();
     }
 
-    let id = req.params.commentId;
+    const postId = req.params.postId;
+    const commentId = req.params.commentId;
 
-    comments.splice(id, 1);
-    res.status(200).send(id);
+    if (!store.posts[postId] || !store.posts[postId].comments[commentId]) {
+      res.status(404).send('Resource not found');
+    }
+
+    store.posts[postId].comments.splice(commentId, 1);
+    res.status(200).send({ id: commentId });
   }
 };

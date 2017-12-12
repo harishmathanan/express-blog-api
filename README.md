@@ -1,5 +1,5 @@
 # Express Blog API
-Blog application API with full CRUD operations. Built with Express framework.
+API Web server for blog application with full CRUD operations. Built with Express framework.
 
 ## Dependencies
 * body-parser
@@ -12,7 +12,7 @@ Blog application API with full CRUD operations. Built with Express framework.
 1. Ensure machine has Nodejs installed.
 2. Download repository to folder or `git clone`.
 3. Within the folder run `npm install` from command to install all dependencies.
-4. Once complete run `npm dev` to start up the express server.
+4. Once complete run `npm run dev` to start up the express server.
 5. Navigate to `http://localhost:3000` to view the available endpoints.
 
 ## Usage
