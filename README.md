@@ -1,5 +1,5 @@
 # Express Blog API
-Blog application API with CRUD operations. Built with the Express framework.
+Blog application API with full CRUD operations. Built with Express framework.
 
 ## Dependencies
 * body-parser
